@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -61,19 +62,17 @@ func quickfix(v *nvim.Nvim) func(context.Context, *mcp.CallToolRequest, Quickfix
 }
 
 func main() {
-	if len(os.Args) > 2 {
-		fmt.Fprintln(os.Stderr, "usage: nvim-qf-mcp [nvim-socket] (or set NVIM_SOCKET)")
+	socket := flag.String("socket", os.Getenv("NVIM_SOCKET"), "Neovim RPC socket path")
+	flag.Parse()
+	if flag.NArg() != 0 {
+		fmt.Fprintln(os.Stderr, "unexpected positional arguments")
+		flag.Usage()
 		os.Exit(2)
 	}
-	socket := os.Getenv("NVIM_SOCKET")
-	if len(os.Args) == 2 {
-		socket = os.Args[1]
+	if *socket == "" {
+		log.Fatal("socket is required (-socket or NVIM_SOCKET)")
 	}
-	if socket == "" {
-		fmt.Fprintln(os.Stderr, "NVIM_SOCKET is not set")
-		os.Exit(2)
-	}
-	v, err := nvim.Dial(socket)
+	v, err := nvim.Dial(*socket)
 	if err != nil {
 		log.Fatal(err)
 	}
