@@ -1,12 +1,3 @@
-// nvim-quickfix-mcp exposes a single MCP tool for creating Neovim quickfix lists.
-//
-// Run:
-//
-//	go mod init example.com/nvim-quickfix-mcp
-//	go get github.com/modelcontextprotocol/go-sdk/mcp github.com/neovim/go-client/nvim
-//	go run nvim-quickfix-mcp.go /path/to/nvim.sock
-//
-// Find the socket in Neovim with: :echo v:servername
 package main
 
 import (
